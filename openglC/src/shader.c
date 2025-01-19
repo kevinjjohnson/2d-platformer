@@ -22,8 +22,8 @@ uint32_t create_shader(char* filepath, GLenum type) {
 	fseek(file, 0, 0);
 	fread((void*)source, 1, size, file);
 	source[size] = '\0';
-	printf(source);
-	printf("\nfile size is: %ld bytes", size);
+	//printf(source);
+	//printf("\nfile size is: %ld bytes", size);
 	shader = glCreateShader(type);
 	char infoLog[512];
 	const char* src = source;

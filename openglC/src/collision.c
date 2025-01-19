@@ -80,11 +80,11 @@ bool isColliding(point* polygon1, int size1, vec2 center1, point* polygon2, int 
 			glm_vec2_sub(center1, center2, d);
 			if (glm_vec2_dot(d, finalAxis) < 0) {
 				glm_vec2_scale(finalAxis, -1.0f, finalAxis);
-				printf("axis inverted");
+				//printf("axis inverted");
 			}
 		}
 	}
-	printf("TRANSLATION AXIS: (%f, %f)\n", finalAxis[0], finalAxis[1]);
+	//printf("TRANSLATION AXIS: (%f, %f)\n", finalAxis[0], finalAxis[1]);
 	glm_vec2_scale(finalAxis, minInterval, *translationVector);
 	return true;
 }

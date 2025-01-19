@@ -29,3 +29,21 @@ void init_quad(quad* q, vec2 size, vec2 location, uint32_t texture) {
 	}
 	q->texture = texture;
 }
+
+void quad_set_pos(quad* q, vec2 pos) {
+	q->location[0] = pos[0];
+	q->location[1] = pos[1];
+	
+	float half_width = q->size[0] / 2;
+	float half_height = q->size[1] / 2;
+
+	q->corners[0].x = pos[0] - half_width;
+	q->corners[0].y = pos[1] - half_height;
+	q->corners[1].x = pos[0] + half_width;
+	q->corners[1].y = pos[1] - half_height;
+	q->corners[2].x = pos[0] + half_width;
+	q->corners[2].y = pos[1] + half_height;
+	q->corners[3].x = pos[0] - half_width;
+	q->corners[3].y = pos[1] + half_height;
+
+}

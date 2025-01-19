@@ -10,6 +10,7 @@
 #include "include/batch_renderer.h"
 #include "include/quad.h"
 #include "include/camera.h"
+#include "include/character.h"
 
 
 typedef struct {
@@ -18,7 +19,42 @@ typedef struct {
 } Settings;
 
 
-void processInput(GLFWwindow* window);
+player player_character;
+int a_held = 0;
+int d_held = 0;
+
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+        printf("Space pressed\n");
+        player_character.has_jump = true;
+    }
+    else if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) {
+        printf("Space released\n");
+    }
+    else if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+        player_character.movement_dir = 1;
+        d_held = 1;
+    }
+    else if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
+        if (a_held)
+            player_character.movement_dir = -1;
+        else
+            player_character.movement_dir = 0;
+        d_held = 0;
+    }
+    else if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+        player_character.movement_dir = -1;
+        a_held = 1;
+    }
+    else if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
+        if(d_held)
+            player_character.movement_dir = 1;
+        else
+            player_character.movement_dir = 0;
+        a_held = 0;
+    }
+}
 
 void movePoints(point* points, int size, vec2 amt) {
     for (int i = 0; i < size; i++) {
@@ -41,6 +77,7 @@ int main(void) {
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
+    glfwSetKeyCallback(window, key_callback);
 
     GLenum err = glewInit();
     if (err != GLEW_OK) {
@@ -58,112 +95,69 @@ int main(void) {
     uint32_t shaderProgram;
     shaderProgram = create_shader_program(vertexShader, fragmentShader);
 
-
-    //mat4 ortho;
-    //glm_ortho(0.0f, 1600.0f, 0.0f, 900.0f, -1.0f, 1.0f, ortho);
-
     camera cam;
     init_camera(&cam);
-
 
 
     uint32_t projection = glGetUniformLocation(shaderProgram, "projection");
     glUniformMatrix4fv(projection, 1, GL_FALSE, (float*)cam.view_projection_matrix);
 
-    vec2 testAxis = { 0.0f, 1.0f };
-
-    //first box(static one, test tex)
-    point polygon1[4];
-    polygon1[0].x = 750;
-    polygon1[0].y = 400;
-    polygon1[1].x = 850;
-    polygon1[1].y = 400;
-    polygon1[2].x = 850;
-    polygon1[2].y = 500;
-    polygon1[3].x = 750;
-    polygon1[3].y = 500;
-    vec2 center1 = { 800, 450 };
-
-    //second box(moving, bruno)
-    point polygon2[4];
-    polygon2[0].x = 50;
-    polygon2[0].y = 50;
-    polygon2[1].x = 150;
-    polygon2[1].y = 50;
-    polygon2[2].x = 150;
-    polygon2[2].y = 150;
-    polygon2[3].x = 50;
-    polygon2[3].y = 150;
-    vec2 center2 = { 100, 100 };
-
     vec2 translationVec;
-    bool collided = isColliding(polygon1, 4, center1, polygon2, 4, center2, &translationVec);
-    if (collided) {
-        printf("polygons collided\n translation vector is: (%f, %f)\n", translationVec[0], translationVec[1]);
-    }
-    else {
-        printf("polygons didnt collide\n");
-    }
-
-
-
+    
     uint32_t texture1, texture2;
-    texture1 = load_texture("resources/textures/home.png", GL_TEXTURE_2D, 0);
+    texture1 = load_texture("resources/textures/player.png", GL_TEXTURE_2D, 0);
 
-    texture2 = load_texture("resources/textures/bruno.png", GL_TEXTURE_2D, 1);
+    texture2 = load_texture("resources/textures/floor.png", GL_TEXTURE_2D, 1);
     uint32_t tex = glGetUniformLocation(shaderProgram, "textures");
     int samplers[2] = { 0, 1 };
     glUniform1iv(tex, 2, samplers);
 
+    quad ground;
+    init_quad(&ground, (vec2) { 1200, 40 }, (vec2) {800, 60}, 1);
+    
+    
+    init_player(&player_character, (vec2) {400, 400});
 
     batch_renderer renderer;
     init_batch_renderer(&renderer);
 
-    quad q1;
-    init_quad(&q1, (vec2) { 100, 100 }, (vec2) { 100, 100 }, 0);
-    quad q2;
-    init_quad(&q2, (vec2) { 500, 500 }, (vec2) { 800, 450 }, 0);
-    quad q3;
-    init_quad(&q3, (vec2) { 200, 200 }, (vec2) {300, 400 }, 1);
-
-    add_quad(&renderer, q1);
-    add_quad(&renderer, q2);
-    add_quad(&renderer, q3);
+    float delta_time = 0.0f;
+    float last_frame = 0.0f;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         renderer.num_draw_calls = 0;
+        float current_frame = glfwGetTime();
+        delta_time = current_frame - last_frame;
+        last_frame = current_frame;
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
+
         
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            move_camera(&cam, (vec2) {0.0f, 2.0f});
-        }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            move_camera(&cam, (vec2) { 0.0f, -2.0f });
-        }
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            move_camera(&cam, (vec2) { -2.0f, 0.0f });
-        }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            move_camera(&cam, (vec2) { 2.0f, 0.0f });
-        }
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             printf("should be zoomin");
-            zoom_camera(&cam, cam.zoom - .01);
+            //zoom_camera(&cam, cam.zoom - .01);
+        }
+
+        handle_jump(&player_character, delta_time);
+        handle_horizontal(&player_character, delta_time);
+        handle_gravity(&player_character, delta_time);
+        printf("Player x velocity: %f\n", player_character.velocity[0]);
+        printf("Player y velocity: %f\n", player_character.velocity[1]);
+        apply_physics(&player_character, delta_time);
+
+        
+        //printf("bottom left of collider: (%f, %f)\n", polygon2[0].x, polygon2[0].y);
+        if (isColliding((point*)player_character.quad.corners, 4, player_character.position, (point*)ground.corners, 4, ground.location, &translationVec)) {
+            printf("polygons collided, translation vector is: (%f, %f)\n", translationVec[0], translationVec[1]);
+            //location2[0] += translationVec[0];
+            //location2[1] += translationVec[1];
+            //movePoints(polygon2, 4, translationVec);
+            player_character.is_grounded = true;
+            move_player(&player_character, translationVec);
         }
         
-
-        /*
-        printf("bottom left of collider: (%f, %f)\n", polygon2[0].x, polygon2[0].y);
-        if (isColliding(polygon2, 4, location2, polygon1, 4, center1, &translationVec)) {
-            printf("polygons collided, translation vector is: (%f, %f)\n", translationVec[0], translationVec[1]);
-            location2[0] += translationVec[0];
-            location2[1] += translationVec[1];
-            movePoints(polygon2, 4, translationVec);
-        }
-        */
 
         glUseProgram(shaderProgram);
         glActiveTexture(GL_TEXTURE0);
@@ -180,25 +174,12 @@ int main(void) {
         calculate_view_projection_matrix(&cam);
         projection = glGetUniformLocation(shaderProgram, "projection");
         glUniformMatrix4fv(projection, 1, GL_FALSE, (float*)cam.view_projection_matrix);
-        //add_quad(&renderer, q1);
-        //add_quad(&renderer, q2);
-        //add_quad(&renderer, q3);
-
-        int row, col;
-        float offset = 60;
-        float size = 80;
-        for (col = 0; col < 10; col++) {
-            for (row = 0; row < 10; row++) {
-                quad q;
-                init_quad(&q, (vec2) { size, size }, (vec2) { (col * size) + offset, (row * size) + 60.0 }, col % 2);
-                add_quad(&renderer, q);
-            }
-        }
-
+        add_quad(&renderer, ground);
+        render_player(&renderer, player_character);
 
         draw_batch(&renderer);
         flush_renderer(&renderer);
-        printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
+        //printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -209,8 +190,4 @@ int main(void) {
 
     glfwTerminate();
     return 0;
-}
-
-void processInput(GLFWwindow* window) {
-    
 }

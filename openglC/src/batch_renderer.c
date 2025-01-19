@@ -7,28 +7,7 @@
 #define MAX_VERTEX_COUNT MAX_QUAD_COUNT * 4
 #define MAX_INDEX_COUNT MAX_QUAD_COUNT * 6
 
-
-
-uint32_t testindicies[] = {
-	0, 1, 2, 2, 3, 0,
-	4, 5, 6, 6, 7, 4,
-	8, 9, 10, 10, 11, 8
-};
-
-float testverts[] = {
-	 150.0f,  150.0f,  1.0f, 1.0f, 1.0f,
-	 150.0f,  50.0f,  1.0f, 0.0f, 1.0f,
-	 50.0f,  50.0f,  0.0f, 0.0f, 1.0f,
-	 50.0f,  150.0f,  0.0f, 1.0f, 1.0f,
-	 
-	 850.0f,  500.0f,  1.0f, 1.0f, 1.0f,
-	 850.0f,  400.0f,  1.0f, 0.0f, 1.0f,
-	 750.0f,  400.0f,  0.0f, 0.0f, 1.0f, 
-	 750.0f,  500.0f,  0.0f, 1.0f, 1.0f,
-};
-
 void init_batch_renderer(batch_renderer* renderer) {
-	printf("test");
 	renderer->num_quads = 0;
 	renderer->num_draw_calls = 0;
 

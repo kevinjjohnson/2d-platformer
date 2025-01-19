@@ -39,6 +39,9 @@
     <ClCompile Include="src\camera.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\character.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="dependencies\GLEW\doc\advanced.html" />
@@ -103,6 +106,9 @@
     <ClInclude Include="src\include\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\bruno.png">
@@ -115,6 +121,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\textures\home.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\floor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\player.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
