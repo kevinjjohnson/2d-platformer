@@ -21,6 +21,7 @@ typedef struct {
 	uint32_t va;
 	uint32_t vb;
 	uint32_t ib;
+	uint32_t shader_program;
 
 	vertex* buffer_start;
 	vertex* buffer_current;

@@ -15,3 +15,4 @@ void init_camera(camera* cam);
 void calculate_view_projection_matrix(camera* cam);
 void move_camera(camera* cam, vec2 translation);
 void zoom_camera(camera* cam, float amount);
+void center_camera(camera* cam, vec2 center);

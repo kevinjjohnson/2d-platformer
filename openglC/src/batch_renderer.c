@@ -50,6 +50,13 @@ void init_batch_renderer(batch_renderer* renderer) {
 	renderer->buffer_start = malloc(MAX_VERTEX_COUNT * sizeof(vertex));
 	renderer->buffer_current = renderer->buffer_start;
 
+	uint32_t vertex_shader;
+	vertex_shader = create_shader("resources/shaders/firstVertex.shader", GL_VERTEX_SHADER);
+
+	uint32_t fragment_shader;
+	fragment_shader = create_shader("resources/shaders/firstFragment.shader", GL_FRAGMENT_SHADER);
+
+	renderer->shader_program = create_shader_program(vertex_shader, fragment_shader);
 }
 
 void free_batch_renderer(batch_renderer* renderer){

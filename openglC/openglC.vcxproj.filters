@@ -42,6 +42,12 @@
     <ClCompile Include="src\character.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\level.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="dependencies\GLEW\doc\advanced.html" />
@@ -107,6 +113,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\include\character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\level.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -29,4 +29,9 @@ void zoom_camera(camera* cam, float amount) {
 	glm_ortho(0.0f, 1600.0f * cam->zoom, 0.0f, 900.0f * cam->zoom, -1.0f, 1.0f, cam->projection_matrix);
 }
 
+void center_camera(camera* cam, vec2 center) {
+	cam->position[0] = center[0] - 800;
+	cam->position[1] = center[1] - 450;
+}
+
 

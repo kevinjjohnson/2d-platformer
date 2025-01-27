@@ -23,10 +23,12 @@
     <ClCompile Include="src\camera.c" />
     <ClCompile Include="src\character.c" />
     <ClCompile Include="src\collision.c" />
+    <ClCompile Include="src\level.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\quad.c" />
     <ClCompile Include="src\shader.c" />
     <ClCompile Include="src\texture.c" />
+    <ClCompile Include="src\utility.c" />
     <ClCompile Include="src\vendor\stb_image\stb_image.c" />
   </ItemGroup>
   <ItemGroup>
@@ -61,9 +63,12 @@
     <ClInclude Include="src\include\camera.h" />
     <ClInclude Include="src\include\character.h" />
     <ClInclude Include="src\include\collison.h" />
+    <ClInclude Include="src\include\engine.h" />
+    <ClInclude Include="src\include\level.h" />
     <ClInclude Include="src\include\quad.h" />
     <ClInclude Include="src\include\shader.h" />
     <ClInclude Include="src\include\texture.h" />
+    <ClInclude Include="src\include\utility.h" />
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>

@@ -2,14 +2,14 @@
 #include <float.h>
 #include <math.h>
 
-float intervalDistance(float minA, float maxA, float minB, float maxB) {
+float interval_distance(float minA, float maxA, float minB, float maxB) {
 	if (minA < minB)
 		return minB - maxA;
 	else
 		return minA - maxB;
 }
 
-void projectPolygon(vec2 axis, point* points, int size, float* min, float* max) {
+void project_polygon(vec2 axis, point* points, int size, float* min, float* max) {
 	if (size <= 0) {
 		//assert("FUCK YOU");
 		size = 1;
@@ -29,7 +29,7 @@ void projectPolygon(vec2 axis, point* points, int size, float* min, float* max) 
 	}
 }
 
-bool isColliding(point* polygon1, int size1, vec2 center1, point* polygon2, int size2, vec2 center2, vec2* translationVector) {
+bool is_colliding(point* polygon1, int size1, vec2 center1, point* polygon2, int size2, vec2 center2, vec2* translationVector) {
 	if (size1 <= 1 || size2 <= 1)
 		//assert("kill yourself one of those is a point");
 		size1 = .5;
@@ -64,10 +64,10 @@ bool isColliding(point* polygon1, int size1, vec2 center1, point* polygon2, int 
 		axis[1] = e.x;
 		glm_vec2_normalize(axis);
 
-		projectPolygon(axis, polygon1, size1, &minA, &maxA);
-		projectPolygon(axis, polygon2, size2, &minB, &maxB);
+		project_polygon(axis, polygon1, size1, &minA, &maxA);
+		project_polygon(axis, polygon2, size2, &minB, &maxB);
 		//if they arent intersecting on one axis then they arent on any so return early;
-		dist = intervalDistance(minA, maxA, minB, maxB);
+		dist = interval_distance(minA, maxA, minB, maxB);
 		if (dist > 0)
 			return false;
 		//should be negative so make it positive again 
@@ -88,3 +88,8 @@ bool isColliding(point* polygon1, int size1, vec2 center1, point* polygon2, int 
 	glm_vec2_scale(finalAxis, minInterval, *translationVector);
 	return true;
 }
+
+bool check_collision(collider c1, collider c2, vec2* result) {
+	return is_colliding(c1.verticies, c1.size, *c1.center, c2.verticies, c2.size, *c2.center, result);
+}
+
