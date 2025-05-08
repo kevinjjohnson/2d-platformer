@@ -13,6 +13,7 @@
 #include "include/camera.h"
 #include "include/character.h"
 #include "include/engine.h"
+#include "include/level.h"
 
 typedef struct {
     int size[2];
@@ -123,6 +124,15 @@ int main(void) {
     collidables[0] = c1;
     collidables[1] = c2;
     int num_collidables = 2;
+
+    level test_level;
+    test_level.level_id = 0;
+    test_level.num_spawns = 2;
+    save_level("resources/levels/test.level", test_level);
+    load_level("resources/levels/test.level");
+
+    //write_quad("resources/levels/test.level", platform1);
+    //read_quad("resources/levels/test.level");
 
 
     float delta_time = 0.0f;
